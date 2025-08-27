@@ -1,0 +1,17 @@
+server:
+  port: 8080
+  admin_port: 8081
+
+database:
+  host: 127.0.0.1
+  port: 3306
+  user: root
+  password: testroot
+  name: bookstore
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: ""
+  db: 0
+
