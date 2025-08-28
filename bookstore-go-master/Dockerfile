@@ -16,14 +16,14 @@ RUN go mod download
 # 复制源代码
 COPY . .
 
-# 构建用户端应用
+# 构建应用
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o bookstore-manager ./cmd/bookstore-manager/
 
 # 使用轻量级的alpine镜像作为运行环境
 FROM alpine:latest
 
 # 安装必要的运行时依赖
-RUN apk --no-cache add ca-certificates tzdata
+RUN apk --no-cache add ca-certificates tzdata wget
 
 # 设置时区
 ENV TZ=Asia/Shanghai
@@ -50,12 +50,13 @@ RUN chown -R bookstore:bookstore /app
 # 切换到非root用户
 USER bookstore
 
-# 暴露端口
-EXPOSE 8080
+# 暴露端口（用户端和管理员端）
+EXPOSE 8080 8081
 
-# 健康检查
+# 健康检查 - 同时检查用户端和管理员端
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/api/v1/health || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/api/v1/health && \
+  wget --no-verbose --tries=1 --spider http://localhost:8081/api/v1/admin/health || exit 1
 
-# 启动用户端服务
-CMD ["./bookstore-manager"] 
+# 启动服务（同时启动用户端和管理员端）
+CMD ["./bookstore-manager"]
