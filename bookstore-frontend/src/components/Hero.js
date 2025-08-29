@@ -14,7 +14,7 @@ const Hero = () => {
       try {
         const response = await fetch('http://localhost:8080/api/v1/carousel/list');
         const data = await response.json();
-        
+
         if (data.code === 0) {
           // 转换后端数据格式为前端需要的格式
           const formattedSlides = data.data.map(carousel => ({
@@ -36,7 +36,7 @@ const Hero = () => {
               title: "精选好书推荐",
               subtitle: "发现更多精彩内容",
               description: "为您推荐最优质的图书，涵盖文学、科技、历史等多个领域",
-              image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1200&h=400&fit=crop",
+              image: "https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?w=300&h=400&fit=crop",
               buttonText: "立即探索",
               buttonLink: "/category/文学"
             },
@@ -45,7 +45,7 @@ const Hero = () => {
               title: "科幻小说专区",
               subtitle: "探索无限可能的科幻世界",
               description: "发现更多精彩科幻作品，体验未来科技的魅力",
-              image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=1200&h=400&fit=crop",
+              image: "https://images.unsplash.com/photo-1506260408121-e353d10b87c7?w=300&h=400&fit=crop",
               buttonText: "查看科幻",
               buttonLink: "/category/科幻"
             },
@@ -54,7 +54,7 @@ const Hero = () => {
               title: "儿童文学天地",
               subtitle: "为孩子们精选的童话故事",
               description: "为孩子们精选的童话故事，培养阅读兴趣",
-              image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&h=400&fit=crop",
+              image: "https://images.unsplash.com/photo-1505852679233-d9fd70aff56d?w=300&h=400&fit=crop",
               buttonText: "查看童话",
               buttonLink: "/category/童话"
             }
@@ -69,7 +69,7 @@ const Hero = () => {
             title: "精选好书推荐",
             subtitle: "发现更多精彩内容",
             description: "为您推荐最优质的图书，涵盖文学、科技、历史等多个领域",
-            image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1200&h=400&fit=crop",
+            image: "https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?w=300&h=400&fit=crop",
             buttonText: "立即探索",
             buttonLink: "/category/文学"
           },
@@ -78,7 +78,7 @@ const Hero = () => {
             title: "科幻小说专区",
             subtitle: "探索无限可能的科幻世界",
             description: "发现更多精彩科幻作品，体验未来科技的魅力",
-            image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=1200&h=400&fit=crop",
+            image: "https://images.unsplash.com/photo-1506260408121-e353d10b87c7?w=300&h=400&fit=crop",
             buttonText: "查看科幻",
             buttonLink: "/category/科幻"
           },
@@ -87,7 +87,7 @@ const Hero = () => {
             title: "儿童文学天地",
             subtitle: "为孩子们精选的童话故事",
             description: "为孩子们精选的童话故事，培养阅读兴趣",
-            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&h=400&fit=crop",
+            image: "https://images.unsplash.com/photo-1505852679233-d9fd70aff56d?w=300&h=400&fit=crop",
             buttonText: "查看童话",
             buttonLink: "/category/童话"
           }
@@ -167,7 +167,7 @@ const Hero = () => {
                   <h1 className="hero-title">{slide.title}</h1>
                   <h2 className="hero-subtitle">{slide.subtitle}</h2>
                   <p className="hero-description">{slide.description}</p>
-                  <button 
+                  <button
                     className="hero-button"
                     onClick={() => handleButtonClick(slide.buttonLink)}
                   >
