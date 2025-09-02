@@ -21,9 +21,8 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
       - --init-connect='SET NAMES utf8mb4'
-      - --skip-character-set-client-handshake
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p123456"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "mysql", "-u", "root", "-p123456"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -51,16 +50,6 @@ services:
     ports:
       - "8080:8080"
       - "8081:8081"
-    environment:
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASSWORD=123456
-      - DB_NAME=bookstore
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - REDIS_PASSWORD=
-      - REDIS_DB=0
     depends_on:
       mysql:
         condition: service_healthy

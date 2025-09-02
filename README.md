@@ -769,7 +769,7 @@ cd bookstore-go
 go mod tidy
 
 # 编辑配置文件，设置数据库连接信息
-vim conf/config.yaml
+vim conf/conf.yaml
 
 # 配置文件示例
 server:
@@ -777,14 +777,14 @@ server:
   admin_port: 8081  # 管理员端口
 
 database:
-  host: 127.0.0.1
+  host: mysql
   port: 3306
   user: root
   password: your_password
   name: bookstore
 
 redis:
-  host: 127.0.0.1
+  host: redis
   port: 6379
   password: ""
   db: 0

@@ -18,7 +18,7 @@ type ServerConfig struct {
 // DatabaseConfig 定义数据库连接配置
 // 包含MySQL数据库连接所需的所有参数
 type DatabaseConfig struct {
-	Host     string `yaml:"host"`     // 数据库服务器地址，如127.0.0.1或mysql.example.com
+	Host     string `yaml:"host"`     // 数据库服务器地址
 	Port     int    `yaml:"port"`     // 数据库端口，MySQL默认3306
 	User     string `yaml:"user"`     // 数据库用户名
 	Password string `yaml:"password"` // 数据库密码

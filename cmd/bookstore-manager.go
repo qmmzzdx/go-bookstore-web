@@ -29,7 +29,7 @@ func init() {
 // 负责初始化配置、数据库连接，启动HTTP服务器并处理优雅关闭
 func main() {
 	// 初始化应用程序配置，从指定路径加载YAML配置文件
-	config.InitConfig("conf/config.yaml")
+	config.InitConfig("conf/conf.yaml")
 	// 获取全局配置实例
 	cfg := config.AppConfig
 

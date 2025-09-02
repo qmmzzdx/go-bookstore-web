@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
-	"strconv"
 
 	"bookstore/config"
 
@@ -48,25 +46,20 @@ func InitMySQL() {
 	// 从全局配置中获取数据库配置
 	cfg := config.AppConfig.Database
 
-	// 优先使用环境变量
-	host := getEnv("DB_HOST", cfg.Host)
-	port := getEnvAsInt("DB_PORT", cfg.Port)
-	user := getEnv("DB_USER", cfg.User)
-	password := getEnv("DB_PASSWORD", cfg.Password)
-	name := getEnv("DB_NAME", cfg.Name)
-
 	// 构建MySQL连接字符串(DSN)
 	// 格式: "用户名:密码@协议(地址:端口)/数据库名?参数"
 	// 参数说明:
-	//   - charset=utf8mb4: 使用完整的UTF-8编码(支持emoji等特殊字符)
-	//   - parseTime=True: 将数据库时间类型自动解析为Go的time.Time
-	//   - loc=Local: 使用时区本地化处理时间
+	//   - charset=utf8mb4: 使用完整的UTF-8编码(支持4字节字符，如emoji表情)
+	//   - parseTime=True: 将数据库中的DATE/DATETIME/TIMESTAMP类型自动解析为Go的time.Time类型
+	//   - loc=Local: 使用时区本地化处理时间，确保时间字段与应用程序所在时区一致
+	//   - collation=utf8mb4_unicode_ci: 设置字符集排序规则为Unicode大小写不敏感，支持多语言排序
+	//   - tcp: 使用TCP协议进行数据库连接（默认协议）
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local&collation=utf8mb4_unicode_ci",
-		user,     // 数据库用户名
-		password, // 数据库密码
-		host,     // 数据库主机地址
-		port,     // 数据库端口
-		name,     // 数据库名称
+		cfg.User,     // 数据库用户名
+		cfg.Password, // 数据库密码
+		cfg.Host,     // 数据库主机地址
+		cfg.Port,     // 数据库端口
+		cfg.Name,     // 数据库名称
 	)
 
 	// 连接数据库
@@ -96,21 +89,15 @@ func InitRedis() {
 	// 获取Redis配置
 	cfg := config.AppConfig.Redis
 
-	// 优先使用环境变量
-	host := getEnv("REDIS_HOST", cfg.Host)
-	port := getEnvAsInt("REDIS_PORT", cfg.Port)
-	password := getEnv("REDIS_PASSWORD", cfg.Password)
-	db := getEnvAsInt("REDIS_DB", cfg.DB)
-
 	// 创建Redis客户端实例
 	// 配置选项包括:
 	//   - Addr: Redis服务器地址(主机:端口)
 	//   - Password: Redis认证密码
 	//   - DB: 选择的Redis数据库编号
 	RedisClient = redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%d", host, port), // Redis服务器地址
-		Password: password,                         // Redis密码
-		DB:       db,                               // Redis数据库编号
+		Addr:     fmt.Sprintf("%s:%d", cfg.Host, cfg.Port), // Redis服务器地址
+		Password: cfg.Password,                             // Redis密码
+		DB:       cfg.DB,                                   // Redis数据库编号
 	})
 
 	// 测试连接，使用context.Background()来传递上下文
@@ -145,22 +132,4 @@ func CloseRedis() {
 	if RedisClient != nil {
 		RedisClient.Close() // 关闭Redis客户端连接
 	}
-}
-
-// 辅助函数：获取环境变量，如果不存在则返回默认值
-func getEnv(key, defaultValue string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
-	}
-	return defaultValue
-}
-
-// 辅助函数：获取环境变量并转换为整数，如果不存在则返回默认值
-func getEnvAsInt(key string, defaultValue int) int {
-	if value := os.Getenv(key); value != "" {
-		if intValue, err := strconv.Atoi(value); err == nil {
-			return intValue
-		}
-	}
-	return defaultValue
 }
