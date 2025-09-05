@@ -103,11 +103,11 @@ MZZDX书城是一个基于Go语言开发的现代化在线图书商城系统，�
 
 所有API响应都遵循统一的JSON格式：
 
-```json
+```python
 {
-  "code": 0,            // 状态码：0表示成功，-1表示失败
-  "message": "success", // 响应消息
-  "data": {}            // 响应数据
+  "code": 0,            # 状态码：0表示成功，-1表示失败
+  "message": "success", # 响应消息
+  "data": {}            # 响应数据
 }
 ```
 
@@ -185,11 +185,11 @@ MZZDX书城是一个基于Go语言开发的现代化在线图书商城系统，�
 
 所有API响应都遵循统一的JSON格式：
 
-```json
+```python
 {
-  "code": 0,            // 状态码：0表示成功，-1表示失败
-  "message": "success", // 响应消息
-  "data": {}            // 响应数据
+  "code": 0,            # 状态码：0表示成功，-1表示失败
+  "message": "success", # 响应消息
+  "data": {}            # 响应数据
 }
 ```
 
@@ -751,59 +751,28 @@ MZZDX书城是一个基于Go语言开发的现代化在线图书商城系统，�
 
 ### 环境要求
 
--   Go 1.21+
+-   Go 1.24+
 -   MySQL 5.7+
 -   Redis 6.0+
 
 ### 1. 克隆项目
 
 ```bash
-git clone https://gitee.com/llinfan/bookstore-go
-cd bookstore-go
+git clone git@github.com:qmmzzdx/go-bookstore-web.git
+cd go-bookstore-web
 ```
 
 ### 2. 后端配置
 
 ```bash
-# 安装依赖
-go mod tidy
-
-# 编辑配置文件，设置数据库连接信息
-vim conf/conf.yaml
-
-# 配置文件示例
-server:
-  port: 8080        # 用户端端口
-  admin_port: 8081  # 管理员端口
-
-database:
-  host: mysql
-  port: 3306
-  user: root
-  password: your_password
-  name: bookstore
-
-redis:
-  host: redis
-  port: 6379
-  password: ""
-  db: 0
-
-# 初始化数据库
-mysql -u root -p < sql/bookstore.sql
-mysql -u root -p < sql/mock.sql
-
-# 编译服务
-make bookstore-manager
-
-# 启动后端服务
-./bin/bookstore-manager
+docker-compose up
 ```
 
 ### 3. 访问应用
 
 -   **用户端后端API**: http://localhost:8080
 -   **管理员后端API**: http://localhost:8081
+-   **访问前端主页面**: http://localhost:3000
 
 ## 📁 项目结构
 
@@ -849,60 +818,3 @@ bookstore-web/
 -   对用户输入进行严格验证和过滤
 -   使用白名单验证列名和输入值
 -   避免直接拼接SQL语句
-
-## 🚀 部署指南
-
-### 生产环境部署
-
-1.  **配置生产环境数据库**: 设置正确的数据库连接参数
-2.  **设置环境变量**: 区分开发和生产环境配置
-3.  **进程守护**: 使用PM2或systemd管理进程，确保服务持续运行
-4.  **反向代理**: 配置Nginx反向代理和HTTPS加密
-5.  **监控与审计**: 记录所有数据库操作，设置异常查询告警
-
-### 使用Systemd进行进程守护
-
-创建service文件`/etc/systemd/system/bookstore.service`:
-
-```ini
-[Unit]
-Description=MZZDX Bookstore Service
-After=network.target
-
-[Service]
-Type=simple
-ExecStart=/path/to/bookstore-manager
-Restart=always
-RestartSec=5s
-User=www-data
-Group=www-data
-
-[Install]
-WantedBy=multi-user.target
-```
-
-### Nginx HTTPS配置示例
-
-```nginx
-server {
-    listen 443 ssl;
-    server_name yourdomain.com;
-
-    ssl_certificate /path/to/your/certificate.crt;
-    ssl_certificate_key /path/to/your/private.key;
-
-    location / {
-        proxy_pass http://localhost:8080;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    }
-
-    location /admin/ {
-        proxy_pass http://localhost:8081;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    }
-}
-```
